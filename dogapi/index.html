@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+body {
+            margin: 0; /* Remova as margens padrão do corpo */
+            padding: 0; /* Remova o preenchimento padrão do corpo */
+            height: 100vh; /* Defina a altura do corpo para cobrir toda a altura da janela */
+            background-image: url(''); /* URL da sua imagem de fundo */
+            background-size: cover; /* Cobrir todo o elemento */
+            background-position: center; /* Centralizar a imagem no elemento */
+            background-repeat: no-repeat; /* Evitar repetição da imagem */
+        }
+        div {
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-size: xx-large;
+        }
+    </style>
+</head>
+<body id="fundo">
+    <div>DOG API</div>
+    <div id="btn">
+        <button id="botao"> Ver doguinho!</button>
+    </div>
+    <div id="mostrador">
+
+    </div>
+    <script>
+        const botao = document.querySelector('#botao').addEventListener('click', capturar)
+
+        async function capturar(){
+            const result = await fetch("https://dog.ceo/api/breeds/image/random")
+            const data = await result.json()
+            let imagem = data['message']
+            let mostrador = document.getElementById('fundo').style.backgroundImage=`url(${imagem})`
+        }
+
+
+    </script>
+</body>
+</html>
