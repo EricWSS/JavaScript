@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background-image: url("https://66357.cdn.simplo7.net/static/66357/sku/nossas-estampas-estampas-misticas-estampa-2021-244--p-1629463907248.png"); /* URL da sua imagem de fundo */
+        background-size: cover; /* Cobrir todo o elemento */
+        background-repeat: no-repeat; /* Evitar repetição da imagem */
+        /* Outras propriedades de estilo, como background-position, background-color, etc. */
+
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Isso evita barras de rolagem */
+      }
+      /* div{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        } */
+      .mostrador {
+        align-items: center;
+        justify-content: center;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 15px;
+
+      }
+      .card{
+        width:30% ;
+        
+      }
+      .container {
+        display: flex;
+        align-items: center;
+      }
+      /* img {
+            width: 12rem;
+            height: auto; 
+            display: block; 
+        } */
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <select name="" id="selecao">
+        <option value="">--Selecione--</option>
+        <option value="Americano">Americano</option>
+        <option value="Europeu">Europeu</option>
+      </select>
+      <button id="unica">Única</button>
+      <button id="dupla">Dupla</button>
+      <button id="trinca">Trinca</button>
+    </div>
+
+    <div class="mostrador" id="mostrador"></div>
+
+    <script src="dados.js"></script>
+    <!-- Recolhento os dados do arquivo -->
+    <script>
+      let _dados = []; /* Armazenando o json */
+      document.getElementById("unica").addEventListener("click", Montador);
+      document.getElementById("dupla").addEventListener("click", Montador);
+      document.getElementById("trinca").addEventListener("click", Montador);
+
+      function SorteiaCarta(metodo) {
+        //Se o metodo == 0 -> tira somente do maior
+        //Se o metodo == 1 -> tira somente do menor
+        //Se o metodo == 2 -> tira uma carta de qualquer um dos dois
+        let posicao_do_primeiro_menor = _dados.filter(
+          (item) => item["arcana"] == "Major Arcana"
+        ).length; /* Cria uma array nova com apenas os MAJOR */
+        if (metodo == 0) {
+          let sorteio = Math.floor(
+            Math.random() * posicao_do_primeiro_menor
+          ); /* Retorna um número inteiro que é o indice do array posicao_do_primeiro_menor*/
+          let item =
+            _dados[
+              sorteio
+            ]; /* Retorna o objeto de acordo com o ************** */
+          _dados.splice(sorteio, 1); /*  */
+          return item;
+        }
+        if (metodo == 1) {
+          let sorteio = Math.floor(
+            Math.random() * (_dados.length - posicao_do_primeiro_menor) +
+              posicao_do_primeiro_menor
+          );
+          console.log(sorteio);
+          let item = _dados[sorteio];
+          _dados.splice(sorteio, 1);
+          return item;
+        }
+        if (metodo == 2) {
+          let sorteio = Math.floor(Math.random() * _dados.length);
+          let item = _dados[sorteio];
+          _dados.splice(sorteio, 1);
+          return item;
+        }
+      }
+
+      function Tiragem(lista) {
+        let resultado = document.getElementById("mostrador");
+        resultado.innerHTML = "";
+        lista.forEach((item) => {
+          let img = `<div class='card'><img src="cards/${item[0]["img"]}"><br/><img src="cards/${item[1]["img"]}" ></div>`;
+          resultado.innerHTML += img;
+        });
+      }
+
+      function Montador(e) {
+        /* Verifica o select, sorteia as cartas e chama a tiragem das cartas (com injeção html) na div */
+        _dados = [...dados["cards"]];
+
+        let selecao = document.getElementById("selecao").value;
+
+        const listaExibicao = [];
+        let repeticao = 1; /* 'Estado' do meu select */
+        if (e.target.id == "dupla") repeticao = 2;
+        if (e.target.id == "trinca") repeticao = 3;
+
+        for (let i = 0; i < repeticao; i++) {
+          if (selecao == "Americano") {
+            listaExibicao.push([SorteiaCarta(0), SorteiaCarta(1)]);
+          } else {
+            listaExibicao.push([SorteiaCarta(2), SorteiaCarta(2)]);
+          }
+        }
+        Tiragem(listaExibicao); /* Montador de <img> */
+      }
+    </script>
+  </body>
+</html>
